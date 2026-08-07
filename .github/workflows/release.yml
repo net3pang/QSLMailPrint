@@ -60,7 +60,7 @@ jobs:
         run: npm run build:backend
 
       - name: Build Electron package
-        run: npx electron-builder ${{ matrix.electron_args }}
+        run: npx electron-builder ${{ matrix.electron_args }} --publish never
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

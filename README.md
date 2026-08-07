@@ -93,8 +93,8 @@ GOOS=windows GOARCH=amd64 npm run build:backend
 推送版本标签后，GitHub Actions 会分别构建 macOS、Windows 和 Linux 安装包：
 
 ```bash
-git tag v1.1.0
-git push origin v1.1.0
+git tag v1.1.2
+git push origin v1.1.2
 ```
 
 ## CSV 格式
@@ -108,7 +108,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.1.1`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.1.2`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 
