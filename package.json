@@ -1,0 +1,65 @@
+{
+  "name": "qsl-mail",
+  "version": "1.1.0",
+  "author": "QSL Mail contributors",
+  "license": "MIT",
+  "description": "Cross-platform envelope printing studio for amateur radio operators",
+  "main": "electron/main.cjs",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "go-backend": "go run ./backend",
+    "check": "node scripts/check.cjs",
+    "build:backend": "node scripts/build-backend.cjs",
+    "dist": "npm run build:backend && electron-builder",
+    "dist:dir": "npm run build:backend && electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "org.qslmail.desktop",
+    "productName": "QSL Mail",
+    "files": [
+      "index.html",
+      "app.js",
+      "styles.css",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/bin",
+        "to": "backend",
+        "filter": [
+          "qsl-mail-backend*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  }
+}
