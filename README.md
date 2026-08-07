@@ -83,6 +83,18 @@ npm run dist
 
 生成的桌面版可以直接双击使用：Windows 提供安装版 `.exe` 和免安装便携版 `.exe`；macOS 提供 `.dmg` 和 `.zip`，安装后运行 `.app`；Linux 提供 `.AppImage`。
 
+### macOS 安全提示
+
+macOS 要求下载的软件具备 Apple Developer ID 签名并完成 notarization。GitHub Actions 已经接入签名和公证流程，但需要在仓库的 `Settings → Secrets and variables → Actions` 中配置：
+
+- `MAC_CERT_BASE64`：Developer ID Application 证书 `.p12` 的 base64 内容
+- `MAC_CERT_PASSWORD`：`.p12` 导出密码
+- `APPLE_ID`：Apple Developer 账号邮箱
+- `APPLE_APP_SPECIFIC_PASSWORD`：Apple ID 专用密码
+- `APPLE_TEAM_ID`：Apple Developer Team ID
+
+未配置这些密钥时仍可构建，但 macOS 会把应用标记为未签名，下载后可能显示“已阻止恶意软件”。
+
 ```bash
 GOOS=darwin GOARCH=arm64 npm run build:backend
 GOOS=darwin GOARCH=amd64 npm run build:backend
@@ -108,7 +120,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.1.3`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.1.4`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 

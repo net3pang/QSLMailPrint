@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.1.4 - 2026-08-08
+
+- 增加 macOS hardened runtime、Developer ID 签名和 notarization 配置。
+- 未配置 Apple 密钥时，构建日志会明确提示跳过公证，避免误认为发行包已通过 macOS 安全验证。
+
 ## 1.1.3 - 2026-08-08
 
 - macOS x64 构建改用可用的 macOS 14 runner，避免因 macOS 13 runner 排队导致 Release 无法完成。
