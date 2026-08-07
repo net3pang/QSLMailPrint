@@ -1,5 +1,9 @@
 # 更新日志
 
+## 1.1.3 - 2026-08-08
+
+- macOS x64 构建改用可用的 macOS 14 runner，避免因 macOS 13 runner 排队导致 Release 无法完成。
+
 ## 1.1.2 - 2026-08-08
 
 - 修正 GitHub Actions 在标签构建时错误尝试直接发布的问题。
