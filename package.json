@@ -1,6 +1,6 @@
 {
   "name": "qsl-mail",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "QSL Mail contributors <qsl-mail@users.noreply.github.com>",
   "license": "MIT",
   "description": "Cross-platform envelope printing studio for amateur radio operators",
@@ -26,6 +26,7 @@
   "build": {
     "appId": "org.qslmail.desktop",
     "productName": "QSL Mail",
+    "icon": "assets/qsl-mail-logo.png",
     "files": [
       "index.html",
       "app.js",
@@ -48,6 +49,7 @@
     "afterSign": "scripts/notarize.cjs",
     "mac": {
       "category": "public.app-category.utilities",
+      "icon": "assets/qsl-mail-logo.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",

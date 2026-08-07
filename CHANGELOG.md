@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.2.1 - 统一应用图标
+
+- Electron 和 Wails 共用 QSL Mail 信封 / 无线电波应用图标。
+- Electron 构建接入 macOS ICNS、Windows/Linux PNG 图标。
+- Wails 使用同一 PNG 在各平台生成原生应用图标。
+
 ## 1.2.0 - 轻量版重构
 
 - 增加 Wails 轻量桌面版，使用 Go + 系统 WebView 复用现有界面，减少 Electron/Chromium 运行时体积。
