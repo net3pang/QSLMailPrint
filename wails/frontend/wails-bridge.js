@@ -1,10 +1,27 @@
-import {GetPrinters, SaveRecord} from './wailsjs/go/main/App.js';
+(function installWailsBridge() {
+  function invoke(method, args = []) {
+    return new Promise((resolve, reject) => {
+      const deadline = Date.now() + 5000;
+      const attempt = () => {
+        const app = window.go?.main?.App;
+        if (typeof app?.[method] === 'function') {
+          Promise.resolve(app[method](...args)).then(resolve, reject);
+          return;
+        }
+        if (Date.now() >= deadline) {
+          reject(new Error(`Wails method ${method} is unavailable`));
+          return;
+        }
+        window.setTimeout(attempt, 25);
+      };
+      attempt();
+    });
+  }
 
-window.electronAPI = {
-  isElectron: false,
-  getPrinters: () => GetPrinters(),
-  saveRecord: async (collection, record) => ({
-    success: true,
-    record: await SaveRecord(collection, record)
-  })
-};
+  // Keep this a classic script: app.js must see electronAPI during its initialisation.
+  window.electronAPI = {
+    isElectron: false,
+    getPrinters: () => invoke('GetPrinters'),
+    saveRecord: (collection, record) => invoke('SaveRecord', [collection, record]).then(record => ({success: true, record}))
+  };
+})();

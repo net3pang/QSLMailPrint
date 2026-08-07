@@ -8,5 +8,8 @@ for (const file of ['app.js', 'styles.css']) {
 }
 
 let index = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
-index = index.replace('<script src="app.js"></script>', '<script type="module" src="wails-bridge.js"></script>\n    <script src="app.js"></script>');
+if (!index.includes('<script src="app.js"></script>')) {
+  throw new Error('根目录 index.html 缺少 app.js 脚本入口');
+}
+index = index.replace('<script src="app.js"></script>', '<script type="module" src="wails-bridge.js"></script>\n    <script type="module" src="app.js"></script>');
 fs.writeFileSync(path.join(frontend, 'index.html'), index);
