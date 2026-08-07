@@ -1,6 +1,6 @@
 {
   "name": "qsl-mail",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "author": "QSL Mail contributors <qsl-mail@users.noreply.github.com>",
   "license": "MIT",
   "description": "Cross-platform envelope printing studio for amateur radio operators",
@@ -12,6 +12,8 @@
     "go-backend": "go run ./backend",
     "check": "node scripts/check.cjs",
     "build:backend": "node scripts/build-backend.cjs",
+    "wails:dev": "node scripts/wails.cjs dev",
+    "wails:build": "node scripts/wails.cjs build",
     "dist": "npm run build:backend && electron-builder --publish never",
     "dist:dir": "npm run build:backend && electron-builder --dir --publish never"
   },

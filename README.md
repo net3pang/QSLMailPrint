@@ -48,6 +48,30 @@ npm run dev
 
 如果没有编译 Go 后端，Electron 仍可启动，但任务和联系人只会保存在前端本地存储中。
 
+## 运行轻量版（Wails）
+
+轻量版使用 Go + 系统 WebView 打包，保留同一套界面和交互，不再捆绑 Chromium。运行已发布的 `.app`、`.exe` 或 Linux 可执行文件不需要安装 Go；Go 只在本地开发和构建时需要。
+
+开发环境：Go 1.23+、Node.js 20+、Wails CLI 2.10.2。安装 CLI：
+
+```bash
+go install github.com/wailsapp/wails/v2/cmd/wails@v2.10.2
+```
+
+启动开发版：
+
+```bash
+npm run wails:dev
+```
+
+构建当前平台的轻量版：
+
+```bash
+npm run wails:build
+```
+
+产物在 `wails/build/bin/`：macOS 为可双击打开的 `.app`，Windows 为 `.exe`，Linux 为可执行文件。轻量版的草稿、任务、联系人和模板仍使用前端本地存储；任务和联系人同时写入与 Electron 相同的 Go JSON 数据文件。轻量版打印通过系统打印流程，打印前预览和系统打印框可正常使用。
+
 ## 保存位置
 
 Electron 版使用两层本地保存：
@@ -105,9 +129,11 @@ GOOS=windows GOARCH=amd64 npm run build:backend
 推送版本标签后，GitHub Actions 会分别构建 macOS、Windows 和 Linux 安装包：
 
 ```bash
-git tag v1.1.3
-git push origin v1.1.3
+git tag v1.2.0
+git push origin v1.2.0
 ```
+
+同一个 Release 还会上传 Wails 轻量版产物，名称以 `qsl-mail-lite-` 开头。轻量版 macOS 是 `.app`，Windows 是 `.exe`，Linux 是原生可执行文件；Electron 安装包仍用于需要静默打印、设备级打印参数或完整安装体验的场景。
 
 ## CSV 格式
 
@@ -120,7 +146,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.1.4`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.2.0`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 

@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.2.0 - 轻量版重构
+
+- 增加 Wails 轻量桌面版，使用 Go + 系统 WebView 复用现有界面，减少 Electron/Chromium 运行时体积。
+- Wails 与 Electron 共用 Go JSON 数据存储，任务和联系人可以跨桌面版本继续使用。
+- 增加 `npm run wails:dev` 和 `npm run wails:build` 构建入口。
+
 ## 1.1.4 - 2026-08-08
 
 - 增加 macOS hardened runtime、Developer ID 签名和 notarization 配置。
