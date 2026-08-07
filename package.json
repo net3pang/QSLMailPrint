@@ -1,6 +1,6 @@
 {
   "name": "qsl-mail",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "QSL Mail contributors",
   "license": "MIT",
   "description": "Cross-platform envelope printing studio for amateur radio operators",
@@ -51,6 +51,7 @@
     "win": {
       "target": [
         "nsis",
+        "portable",
         "zip"
       ]
     },

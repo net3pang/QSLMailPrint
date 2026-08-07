@@ -81,6 +81,8 @@ npm run dist
 
 产物会写入 `dist/`。Go 后端也可以单独交叉编译：
 
+生成的桌面版可以直接双击使用：Windows 提供安装版 `.exe` 和免安装便携版 `.exe`；macOS 提供 `.dmg` 和 `.zip`，安装后运行 `.app`；Linux 提供 `.AppImage`。
+
 ```bash
 GOOS=darwin GOARCH=arm64 npm run build:backend
 GOOS=darwin GOARCH=amd64 npm run build:backend
@@ -106,7 +108,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.1.0`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.1.1`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 
