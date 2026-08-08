@@ -90,6 +90,7 @@ ipcMain.handle('print:envelope', async (event, options = {}) => {
       silent: options.silent === true,
       deviceName: options.deviceName || undefined,
       printBackground: false,
+      color: options.grayscale !== true,
       landscape: false,
       scaleFactor: Math.max(10, Math.min(200, Number(options.scale) || 100)),
       pageSize: {width: mmToMicrons(width), height: mmToMicrons(height)},

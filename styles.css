@@ -73,3 +73,11 @@ body.pdf-printing .printable-envelope .envelope-flap,body.pdf-printing .printabl
 .modal-form .checkbox-row input{width:14px;height:14px;flex:0 0 14px;margin:0}
 @media(max-width:700px){.position-controls{grid-template-columns:1fr 1fr}.postcode-controls{grid-template-columns:1fr 1fr}}
 .contact-chip>span:not(.chip-avatar){min-width:0;flex:1}.contact-chip strong{flex:0 0 auto}
+.domestic-postcode.no-frame .postcode-digit{border-color:transparent;background:transparent;box-shadow:none}
+.envelope.grayscale-output,.envelope.grayscale-output *{color:#000 !important;background-color:#fff !important;background-image:none !important;border-color:#000 !important;box-shadow:none !important;text-shadow:none !important;filter:none !important}
+.envelope.grayscale-output .domestic-postcode.no-frame .postcode-digit{border-color:transparent !important;background-color:transparent !important}
+.postcode-heading-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.postcode-frame-option{white-space:nowrap;margin:0}
+.setting-checkbox-group{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:11px}
+.setting-checkbox-group .checkbox-row{margin:0}
+@media(max-width:700px){.postcode-heading-actions{gap:6px}.postcode-frame-option{font-size:9px}.setting-checkbox-group{gap:12px}}

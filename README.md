@@ -129,8 +129,8 @@ GOOS=windows GOARCH=amd64 npm run build:backend
 推送版本标签后，GitHub Actions 会分别构建 macOS、Windows 和 Linux 安装包：
 
 ```bash
-git tag v1.2.7
-git push origin v1.2.7
+git tag v1.2.8
+git push origin v1.2.8
 ```
 
 同一个 Release 还会上传 Wails 轻量版产物，名称以 `qsl-mail-lite-` 开头。轻量版 macOS 是 `.app`，Windows 是 `.exe`，Linux 是原生可执行文件；Electron 安装包仍用于需要静默打印、设备级打印参数或完整安装体验的场景。
@@ -146,7 +146,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.2.7`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.2.8`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 
