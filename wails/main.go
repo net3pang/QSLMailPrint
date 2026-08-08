@@ -21,8 +21,8 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 243, G: 246, B: 246, A: 1},
-		OnStartup: app.startup,
-		Bind:      []interface{}{app},
+		OnStartup:        app.startup,
+		Bind:             []interface{}{app},
 	}); err != nil {
 		println("Error:", err.Error())
 	}

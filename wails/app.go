@@ -45,6 +45,10 @@ func (a *App) SaveRecord(collection string, record map[string]any) (map[string]a
 	return a.database.SaveRecord(collection, record)
 }
 
+func (a *App) ListRecords(collection string) ([]map[string]any, error) {
+	return a.database.Collection(collection)
+}
+
 func (a *App) SaveTemplate() (string, error) {
 	if a.ctx == nil {
 		return "", errors.New("应用尚未完成初始化")

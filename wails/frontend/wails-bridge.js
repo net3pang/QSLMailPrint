@@ -24,6 +24,7 @@
     getPrinters: () => invoke('GetPrinters'),
     saveTemplate: () => invoke('SaveTemplate'),
     saveRecord: (collection, record) => invoke('SaveRecord', [collection, record]).then(record => ({success: true, record})),
+    listRecords: (collection) => invoke('ListRecords', [collection]),
     deleteRecord: (collection, id) => invoke('DeleteRecord', [collection, id]),
     printEnvelope: async options => {
       try {

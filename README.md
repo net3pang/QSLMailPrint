@@ -117,7 +117,7 @@ macOS 要求下载的软件具备 Apple Developer ID 签名并完成 notarizatio
 - `APPLE_APP_SPECIFIC_PASSWORD`：Apple ID 专用密码
 - `APPLE_TEAM_ID`：Apple Developer Team ID
 
-未配置这些密钥时仍可构建，但 macOS 会把应用标记为未签名，下载后可能显示“已阻止恶意软件”。
+未配置这些密钥时仍可构建，但 macOS 会把应用标记为未签名，下载后可能显示“已阻止恶意软件”。当前本地构建即处于未签名状态，首次打开时请在“系统设置 → 隐私与安全性”中点击“仍要打开”。
 
 ```bash
 GOOS=darwin GOARCH=arm64 npm run build:backend
@@ -129,8 +129,8 @@ GOOS=windows GOARCH=amd64 npm run build:backend
 推送版本标签后，GitHub Actions 会分别构建 macOS、Windows 和 Linux 安装包：
 
 ```bash
-git tag v1.2.8
-git push origin v1.2.8
+git tag v1.3.0
+git push origin v1.3.0
 ```
 
 同一个 Release 还会上传 Wails 轻量版产物，名称以 `qsl-mail-lite-` 开头。轻量版 macOS 是 `.app`，Windows 是 `.exe`，Linux 是原生可执行文件；Electron 安装包仍用于需要静默打印、设备级打印参数或完整安装体验的场景。
@@ -146,7 +146,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.2.8`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.3.0`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 

@@ -10,6 +10,10 @@ export function GetPrinters() {
   return window['go']['main']['App']['GetPrinters']();
 }
 
+export function ListRecords(arg1) {
+  return window['go']['main']['App']['ListRecords'](arg1);
+}
+
 export function PrintEnvelope(arg1) {
   return window['go']['main']['App']['PrintEnvelope'](arg1);
 }

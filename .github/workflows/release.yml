@@ -66,7 +66,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: qsl-mail-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: dist/*
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.deb
           if-no-files-found: error
 
   build-lite:

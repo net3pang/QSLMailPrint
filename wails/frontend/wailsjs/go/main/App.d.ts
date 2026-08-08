@@ -6,6 +6,8 @@ export function DeleteRecord(arg1:string,arg2:string):Promise<void>;
 
 export function GetPrinters():Promise<Array<main.Printer>>;
 
+export function ListRecords(arg1:string):Promise<Array<Record<string, any>>>;
+
 export function PrintEnvelope(arg1:Record<string, any>):Promise<main.PrintResult>;
 
 export function SaveRecord(arg1:string,arg2:Record<string, any>):Promise<Record<string, any>>;

@@ -23,8 +23,8 @@ static NSPrintInfo *qsl_make_print_info(double width_mm, double height_mm, int l
     CGFloat height = MAX(height_mm, 1.0) * 72.0 / 25.4;
     print_info.paperSize = landscape ? NSMakeSize(height, width) : NSMakeSize(width, height);
     print_info.orientation = landscape ? NSPaperOrientationLandscape : NSPaperOrientationPortrait;
-    print_info.horizontalPagination = NSClipPagination;
-    print_info.verticalPagination = NSClipPagination;
+    print_info.horizontalPagination = NSPrintingPaginationModeClip;
+    print_info.verticalPagination = NSPrintingPaginationModeClip;
     print_info.horizontallyCentered = NO;
     print_info.verticallyCentered = NO;
     print_info.topMargin = 0;
@@ -82,7 +82,7 @@ static void qsl_capture_batch_page(WKWebView *webview,
                                    NSInteger page_index,
                                    NSInteger page_count,
                                    NSMutableArray<NSData *> *captured_pages,
-                                   void (^completion)(NSData *)) {
+                                   void (^completion)(NSData *)) API_AVAILABLE(macos(11.0)) {
     NSString *prepare_script = [NSString stringWithFormat:
         @"(function(){var s=document.getElementById('batchPrintSheet');"
          "if(!s)return '0,0';var a=s.querySelectorAll('.printable-envelope');"
@@ -120,7 +120,11 @@ static void qsl_capture_batch_page(WKWebView *webview,
 
             NSInteger next_index = page_index + 1;
             if (next_index < page_count) {
-                qsl_capture_batch_page(webview, next_index, page_count, captured_pages, completion);
+                if (@available(macOS 11.0, *)) {
+                    qsl_capture_batch_page(webview, next_index, page_count, captured_pages, completion);
+                } else {
+                    completion(qsl_merge_pdf_pages(captured_pages));
+                }
             } else {
                 completion(qsl_merge_pdf_pages(captured_pages));
             }
@@ -159,12 +163,16 @@ int qsl_print_webview(double width_mm, double height_mm, int landscape, int show
             }
 
             NSMutableArray<NSData *> *captured_pages = [NSMutableArray arrayWithCapacity:(NSUInteger)page_count];
-            qsl_capture_batch_page(webview, 0, page_count, captured_pages, ^(NSData *pdf_data) {
-                if (pdf_data != nil) {
-                    status = qsl_print_pdf_data(pdf_data, print_info, show_print_panel);
-                }
+            if (@available(macOS 11.0, *)) {
+                qsl_capture_batch_page(webview, 0, page_count, captured_pages, ^(NSData *pdf_data) {
+                    if (pdf_data != nil) {
+                        status = qsl_print_pdf_data(pdf_data, print_info, show_print_panel);
+                    }
+                    dispatch_semaphore_signal(semaphore);
+                });
+            } else {
                 dispatch_semaphore_signal(semaphore);
-            });
+            }
         }];
     };
 
