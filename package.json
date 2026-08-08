@@ -1,6 +1,6 @@
 {
   "name": "qsl-mail",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "author": "QSL Mail contributors <qsl-mail@users.noreply.github.com>",
   "license": "MIT",
   "description": "Cross-platform envelope printing studio for amateur radio operators",

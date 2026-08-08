@@ -79,15 +79,19 @@ jobs:
           - name: macOS arm64
             os: macos-14
             platform: darwin/arm64
+            artifact_suffix: macos-arm64
           - name: macOS x64
             os: macos-14
             platform: darwin/amd64
+            artifact_suffix: macos-x64
           - name: Windows x64
             os: windows-latest
             platform: windows/amd64
+            artifact_suffix: windows-x64
           - name: Linux x64
             os: ubuntu-22.04
             platform: linux/amd64
+            artifact_suffix: linux-x64
 
     steps:
       - name: Checkout
@@ -113,11 +117,20 @@ jobs:
       - name: Build Wails lite app
         run: npm run wails:build -- --platform ${{ matrix.platform }}
 
+      - name: Package Wails Lite macOS app
+        if: runner.os == 'macOS'
+        run: ditto -c -k --sequesterRsrc --keepParent wails/build/bin/wails.app wails/build/bin/QSL-Mail-Lite-${{ matrix.artifact_suffix }}.zip && rm -rf wails/build/bin/wails.app
+
+      - name: Rename Wails Lite binary
+        if: runner.os != 'macOS'
+        shell: bash
+        run: mv "wails/build/bin/wails${{ runner.os == 'Windows' && '.exe' || '' }}" "wails/build/bin/QSL-Mail-Lite-${{ matrix.artifact_suffix }}${{ runner.os == 'Windows' && '.exe' || '' }}"
+
       - name: Upload Wails lite artifact
         uses: actions/upload-artifact@v4
         with:
           name: qsl-mail-lite-${{ matrix.name }}
-          path: wails/build/bin/*
+          path: wails/build/bin/QSL-Mail-Lite-*
           if-no-files-found: error
 
   release:
