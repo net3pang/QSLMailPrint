@@ -2,12 +2,19 @@
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "QSLMailLite",
   "outputfilename": "wails",
+  "info": {
+    "companyName": "BH5HIE",
+    "productName": "QSL Mail Lite",
+    "productVersion": "1.2.7",
+    "copyright": "Copyright (c) 2026 BH5HIE",
+    "comments": "Lightweight envelope printing studio for amateur radio operators"
+  },
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
-    "name": "net3pang",
+    "name": "BH5HIE",
     "email": "cn2day@outlook.com"
   }
 }

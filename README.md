@@ -129,8 +129,8 @@ GOOS=windows GOARCH=amd64 npm run build:backend
 推送版本标签后，GitHub Actions 会分别构建 macOS、Windows 和 Linux 安装包：
 
 ```bash
-git tag v1.2.1
-git push origin v1.2.1
+git tag v1.2.7
+git push origin v1.2.7
 ```
 
 推送到 `main` 也会自动运行跨平台构建，并将 Electron 和 Lite 产物保存为 GitHub Actions Artifacts；只有推送版本标签时才会创建 GitHub Release。
@@ -148,7 +148,7 @@ Takahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100-0001,090-1234-5678
 
 ## 版本
 
-当前版本：`1.2.1`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`1.2.7`。详细变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 开源许可
 
