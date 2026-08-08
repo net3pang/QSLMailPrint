@@ -70,7 +70,7 @@ npm run wails:dev
 npm run wails:build
 ```
 
-产物在 `wails/build/bin/`：macOS 为可双击打开的 `.app`，Windows 为 `.exe`，Linux 为可执行文件。轻量版的草稿、任务、联系人和模板仍使用前端本地存储；任务和联系人同时写入与 Electron 相同的 Go JSON 数据文件。轻量版打印通过系统打印流程，打印前预览和系统打印框可正常使用。
+产物在 `wails/build/bin/`：macOS 为可双击打开的 `.app`，Windows 为 `.exe`，Linux 为可执行文件。轻量版的草稿、任务、联系人和模板仍使用前端本地存储；任务和联系人同时写入与 Electron 相同的 Go JSON 数据文件。轻量版打印使用系统打印流程，macOS 原生打印会按设置显示或跳过系统打印框，并使用当前信封尺寸。
 
 ## 保存位置
 

@@ -22,6 +22,17 @@
   window.electronAPI = {
     isElectron: false,
     getPrinters: () => invoke('GetPrinters'),
-    saveRecord: (collection, record) => invoke('SaveRecord', [collection, record]).then(record => ({success: true, record}))
+    saveRecord: (collection, record) => invoke('SaveRecord', [collection, record]).then(record => ({success: true, record})),
+    deleteRecord: (collection, id) => invoke('DeleteRecord', [collection, id]),
+    printEnvelope: async options => {
+      try {
+        const result = await invoke('PrintEnvelope', [options]);
+        if (result?.handled) return result;
+      } catch (error) {
+        console.warn('Wails native printing unavailable', error);
+      }
+      window.print();
+      return {success: true};
+    }
   };
 })();

@@ -18,6 +18,6 @@ npm run wails:dev
 npm run wails:build
 ```
 
-构建产物位于 `wails/build/bin/`。Wails 使用系统 WebView，不会把 Chromium 一起打包。Wails 壳通过 `wails-bridge.js` 提供打印机查询和 Go 本地数据保存接口；打印仍沿用浏览器系统打印流程，以保持现有预览和打印设置行为。
+构建产物位于 `wails/build/bin/`。Wails 使用系统 WebView，不会把 Chromium 一起打包。Wails 壳通过 `wails-bridge.js` 提供打印机查询、联系人删除和 Go 本地数据保存接口。macOS 使用原生 WebView 打印操作，可按设置显示或跳过系统打印框，并使用信封自定义尺寸；其他平台在原生打印不可用时回退到 WebView 的系统打印流程。
 
 如果构建环境无法访问 Go 模块代理，先执行 `go mod tidy`，再运行构建命令。发布跨平台安装包应在对应的 macOS、Windows、Linux runner 上分别构建。

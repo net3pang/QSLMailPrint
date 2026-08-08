@@ -108,3 +108,20 @@ func (database *Database) SaveRecord(name string, item map[string]any) (map[stri
 	}
 	return item, nil
 }
+
+func (database *Database) DeleteRecord(name, id string) error {
+	database.mu.Lock()
+	defer database.mu.Unlock()
+	collection, err := database.collection(name)
+	if err != nil {
+		return err
+	}
+	filtered := (*collection)[:0]
+	for _, item := range *collection {
+		if item["id"] != id {
+			filtered = append(filtered, item)
+		}
+	}
+	*collection = filtered
+	return database.saveLocked()
+}

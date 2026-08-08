@@ -58,12 +58,26 @@ function saveRecord(collection, record) {
   });
 }
 
+function deleteRecord(collection, id) {
+  return new Promise((resolve, reject) => {
+    const request = http.request({
+      hostname:'127.0.0.1', port:38765, path:`/api/${collection}?id=${encodeURIComponent(id)}`, method:'DELETE'
+    }, response => {
+      response.resume();
+      response.on('end', () => response.statusCode >= 200 && response.statusCode < 300 ? resolve({success:true}) : reject(new Error(`HTTP ${response.statusCode}`)));
+    });
+    request.on('error', reject);
+    request.end();
+  });
+}
+
 ipcMain.handle('printers:list', async event => {
   const window = BrowserWindow.fromWebContents(event.sender);
   if (!window) return [];
   return window.webContents.getPrintersAsync();
 });
 ipcMain.handle('storage:save', async (_event, collection, record) => { try { return {success:true, record:await saveRecord(collection, record)}; } catch (error) { return {success:false, reason:error.message}; } });
+ipcMain.handle('storage:delete', async (_event, collection, id) => { try { return await deleteRecord(collection, id); } catch (error) { return {success:false, reason:error.message}; } });
 
 ipcMain.handle('print:envelope', async (event, options = {}) => {
   const window = BrowserWindow.fromWebContents(event.sender);

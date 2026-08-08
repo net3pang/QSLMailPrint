@@ -18,6 +18,19 @@ func main() {
 	for _, name := range []string{"tasks", "contacts"} {
 		collectionName := name
 		mux.HandleFunc("/api/"+collectionName, func(writer http.ResponseWriter, request *http.Request) {
+			if request.Method == http.MethodDelete {
+				id := request.URL.Query().Get("id")
+				if id == "" {
+					http.Error(writer, "缺少记录 ID", http.StatusBadRequest)
+					return
+				}
+				if err := database.DeleteRecord(collectionName, id); err != nil {
+					http.Error(writer, "删除本地数据失败", http.StatusInternalServerError)
+					return
+				}
+				writer.WriteHeader(http.StatusNoContent)
+				return
+			}
 			if request.Method == http.MethodGet {
 				items, err := database.Collection(collectionName)
 				if err != nil {
