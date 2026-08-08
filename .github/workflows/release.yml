@@ -112,6 +112,10 @@ jobs:
       - name: Install Wails CLI
         run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.10.2
 
+      - name: Install Linux Wails dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
       - name: Build Wails lite app
         run: npm run wails:build -- --platform ${{ matrix.platform }}
 
