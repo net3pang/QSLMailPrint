@@ -133,8 +133,6 @@ git tag v1.2.7
 git push origin v1.2.7
 ```
 
-推送到 `main` 也会自动运行跨平台构建，并将 Electron 和 Lite 产物保存为 GitHub Actions Artifacts；只有推送版本标签时才会创建 GitHub Release。
-
 同一个 Release 还会上传 Wails 轻量版产物，名称以 `qsl-mail-lite-` 开头。轻量版 macOS 是 `.app`，Windows 是 `.exe`，Linux 是原生可执行文件；Electron 安装包仍用于需要静默打印、设备级打印参数或完整安装体验的场景。
 
 ## CSV 格式
