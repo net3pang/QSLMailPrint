@@ -32,4 +32,3 @@ export namespace main {
 	}
 
 }
-

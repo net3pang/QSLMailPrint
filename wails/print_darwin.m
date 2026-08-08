@@ -57,6 +57,77 @@ static int qsl_print_pdf_data(NSData *pdf_data, NSPrintInfo *print_info, int sho
     return [operation runOperation] ? 1 : 2;
 }
 
+static NSData *qsl_merge_pdf_pages(NSArray<NSData *> *pdf_data_items) {
+    PDFDocument *merged = [[PDFDocument alloc] init];
+    NSUInteger output_index = 0;
+
+    for (NSData *pdf_data in pdf_data_items) {
+        PDFDocument *source = [[PDFDocument alloc] initWithData:pdf_data];
+        if (source == nil) {
+            continue;
+        }
+
+        // Each capture is prepared as one envelope page. Keep only the first
+        // page so a WebKit pagination artifact cannot add a blank sheet.
+        PDFPage *page = [source pageAtIndex:0];
+        if (page != nil) {
+            [merged insertPage:page atIndex:output_index++];
+        }
+    }
+
+    return output_index == 0 ? nil : [merged dataRepresentation];
+}
+
+static void qsl_capture_batch_page(WKWebView *webview,
+                                   NSInteger page_index,
+                                   NSInteger page_count,
+                                   NSMutableArray<NSData *> *captured_pages,
+                                   void (^completion)(NSData *)) {
+    NSString *prepare_script = [NSString stringWithFormat:
+        @"(function(){var s=document.getElementById('batchPrintSheet');"
+         "if(!s)return '0,0';var a=s.querySelectorAll('.printable-envelope');"
+         "if(!a[%ld])return '0,0';"
+         "for(var i=0;i<a.length;i++){var v=i===%ld;"
+         "a[i].style.setProperty('display',v?'block':'none','important');"
+         "a[i].style.setProperty('break-before','auto','important');"
+         "a[i].style.setProperty('break-after','auto','important');"
+         "a[i].style.setProperty('page-break-before','auto','important');"
+         "a[i].style.setProperty('page-break-after','auto','important');}"
+         "var r=a[%ld].getBoundingClientRect();"
+         "s.style.setProperty('width',r.width+'px','important');"
+         "s.style.setProperty('height',r.height+'px','important');"
+         "s.style.setProperty('overflow','hidden','important');"
+         "return r.width+','+r.height;})()",
+        (long)page_index, (long)page_index, (long)page_index];
+
+    [webview evaluateJavaScript:prepare_script completionHandler:^(id value, NSError *error) {
+        CGFloat content_width = 1.0;
+        CGFloat content_height = 1.0;
+        if (error == nil && [value isKindOfClass:[NSString class]]) {
+            NSArray<NSString *> *parts = [(NSString *)value componentsSeparatedByString:@","];
+            if (parts.count == 2) {
+                content_width = MAX(parts[0].doubleValue, 1.0);
+                content_height = MAX(parts[1].doubleValue, 1.0);
+            }
+        }
+
+        WKPDFConfiguration *configuration = [[WKPDFConfiguration alloc] init];
+        configuration.rect = CGRectMake(0, 0, content_width, content_height);
+        [webview createPDFWithConfiguration:configuration completionHandler:^(NSData *pdf_data, NSError *pdf_error) {
+            if (pdf_data != nil && pdf_error == nil) {
+                [captured_pages addObject:pdf_data];
+            }
+
+            NSInteger next_index = page_index + 1;
+            if (next_index < page_count) {
+                qsl_capture_batch_page(webview, next_index, page_count, captured_pages, completion);
+            } else {
+                completion(qsl_merge_pdf_pages(captured_pages));
+            }
+        }];
+    }];
+}
+
 int qsl_print_webview(double width_mm, double height_mm, int landscape, int show_print_panel, const char *printer_name) {
     if (!@available(macOS 11.0, *)) {
         return 0;
@@ -76,30 +147,24 @@ int qsl_print_webview(double width_mm, double height_mm, int landscape, int show
         }
 
         NSPrintInfo *print_info = qsl_make_print_info(width_mm, height_mm, landscape, printer_name);
-        NSString *size_script = @"(function(){var e=document.getElementById('batchPrintSheet');if(!e)return '0,0,0,0';var r=e.getBoundingClientRect();return r.left+','+r.top+','+r.width+','+e.scrollHeight;})()";
-        [webview evaluateJavaScript:size_script completionHandler:^(id value, NSError *error) {
-            CGFloat content_width = 1.0;
-            CGFloat content_height = 1.0;
-            if (error == nil && [value isKindOfClass:[NSString class]]) {
-                NSArray<NSString *> *parts = [(NSString *)value componentsSeparatedByString:@","];
-                if (parts.count == 4) {
-                    content_width = MAX(parts[2].doubleValue, 1.0);
-                    content_height = MAX(parts[3].doubleValue, 1.0);
-                } else if (parts.count == 2) {
-                    content_width = MAX(parts[0].doubleValue, 1.0);
-                    content_height = MAX(parts[1].doubleValue, 1.0);
-                }
+        NSString *count_script = @"(function(){var e=document.getElementById('batchPrintSheet');return e?e.querySelectorAll('.printable-envelope').length:0;})()";
+        [webview evaluateJavaScript:count_script completionHandler:^(id value, NSError *error) {
+            NSInteger page_count = 0;
+            if (error == nil && [value respondsToSelector:@selector(integerValue)]) {
+                page_count = [value integerValue];
+            }
+            if (page_count < 1) {
+                dispatch_semaphore_signal(semaphore);
+                return;
             }
 
-            WKPDFConfiguration *configuration = [[WKPDFConfiguration alloc] init];
-            // The print sheet is laid out at the document origin in PDF mode.
-            configuration.rect = CGRectMake(0, 0, content_width, content_height);
-            [webview createPDFWithConfiguration:configuration completionHandler:^(NSData *pdf_data, NSError *pdf_error) {
-                if (pdf_data != nil && pdf_error == nil) {
+            NSMutableArray<NSData *> *captured_pages = [NSMutableArray arrayWithCapacity:(NSUInteger)page_count];
+            qsl_capture_batch_page(webview, 0, page_count, captured_pages, ^(NSData *pdf_data) {
+                if (pdf_data != nil) {
                     status = qsl_print_pdf_data(pdf_data, print_info, show_print_panel);
                 }
                 dispatch_semaphore_signal(semaphore);
-            }];
+            });
         }];
     };
 

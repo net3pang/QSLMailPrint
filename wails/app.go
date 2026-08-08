@@ -2,10 +2,14 @@ package main
 
 import (
 	"context"
+	"errors"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 
+	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 	"qsl-mail/backend/store"
 )
 
@@ -39,6 +43,32 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) SaveRecord(collection string, record map[string]any) (map[string]any, error) {
 	return a.database.SaveRecord(collection, record)
+}
+
+func (a *App) SaveTemplate() (string, error) {
+	if a.ctx == nil {
+		return "", errors.New("应用尚未完成初始化")
+	}
+	filename, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
+		Title:           "保存 CSV 导入模板",
+		DefaultFilename: "qsl-mail-import-template.csv",
+		Filters: []wailsRuntime.FileFilter{{
+			DisplayName: "CSV 文件 (*.csv)",
+			Pattern:     "*.csv",
+		}},
+		CanCreateDirectories: true,
+	})
+	if err != nil || filename == "" {
+		return filename, err
+	}
+	if strings.ToLower(filepath.Ext(filename)) != ".csv" {
+		filename += ".csv"
+	}
+	content := "\xEF\xBB\xBF姓名,呼号,地址,邮编,手机号\nTakahashi Ken,JA7QXG,1-2-3 Chiyoda Tokyo,100000,090-1234-5678\n"
+	if err := os.WriteFile(filename, []byte(content), 0o644); err != nil {
+		return "", err
+	}
+	return filename, nil
 }
 
 func (a *App) DeleteRecord(collection, id string) error {

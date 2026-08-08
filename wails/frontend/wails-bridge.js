@@ -22,6 +22,7 @@
   window.electronAPI = {
     isElectron: false,
     getPrinters: () => invoke('GetPrinters'),
+    saveTemplate: () => invoke('SaveTemplate'),
     saveRecord: (collection, record) => invoke('SaveRecord', [collection, record]).then(record => ({success: true, record})),
     deleteRecord: (collection, id) => invoke('DeleteRecord', [collection, id]),
     printEnvelope: async options => {

@@ -9,3 +9,5 @@ export function GetPrinters():Promise<Array<main.Printer>>;
 export function PrintEnvelope(arg1:Record<string, any>):Promise<main.PrintResult>;
 
 export function SaveRecord(arg1:string,arg2:Record<string, any>):Promise<Record<string, any>>;
+
+export function SaveTemplate():Promise<string>;

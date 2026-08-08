@@ -17,3 +17,7 @@ export function PrintEnvelope(arg1) {
 export function SaveRecord(arg1, arg2) {
   return window['go']['main']['App']['SaveRecord'](arg1, arg2);
 }
+
+export function SaveTemplate() {
+  return window['go']['main']['App']['SaveTemplate']();
+}
