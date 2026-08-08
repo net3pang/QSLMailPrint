@@ -119,7 +119,11 @@ jobs:
 
       - name: Package Wails Lite macOS app
         if: runner.os == 'macOS'
-        run: ditto -c -k --sequesterRsrc --keepParent wails/build/bin/wails.app wails/build/bin/QSL-Mail-Lite-${{ matrix.artifact_suffix }}.zip && rm -rf wails/build/bin/wails.app
+        run: |
+          app_path="$(find wails/build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
+          test -n "$app_path"
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "wails/build/bin/QSL-Mail-Lite-${{ matrix.artifact_suffix }}.zip"
+          rm -rf "$app_path"
 
       - name: Rename Wails Lite binary
         if: runner.os != 'macOS'
